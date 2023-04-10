@@ -1,0 +1,26 @@
+Decisions:
+
+*. Spliting location api into location-producer, location-consumer and using Kafka as a message broker
+=> Once the application growing up, the location serice will be under the pressure of high traffic. 
+-- Using gPRC for location-producer because:
+	a. Better performance
+	b. Message in binary format does not need to be readable by human
+	c. Mobile devices can integrate well with gRPC without an intermediary proxy to the backend service.
+	d. Location producer will be received message from client side
+	e. Easy for scaling on-demand or by scaling policy
+-- A background service for location-consumer because:
+	a. The consumer is not integrated to client side, so that it does not need to be REST or gRPC, just a simple service consume message from message broker
+	b. Easy for scaling on-demand or by scaling policy
+	c. Easy for implementation
+-- Using Kafka as a message broker:
+	a. Once the volumn of request grows up, putting the message to message broker for quickly respond to client
+	b. Message will be stored in broker and cannot be losed  
+ 
+*. Keep the Connection and Person and Location (GET) in a same service using REST API because:
+
+a. This will be facing to client side then using REST for easily in development and maintainance
+b. It is readable
+c. In this use case, it won't be in the high traffic even the application grew up
+d. The connection is also a part of persons route.
+e. Beside of the refactoring by message passing strategies, we can apply some pattern in development like CQRS, lazy loading, paging, re-loading, caching.
+f. Location GET and Person GET by Id are never used

@@ -1,0 +1,122 @@
+openapi: 3.0.1
+info:
+  title: Udaconnect
+  description: Open api for Udaconnect project
+  termsOfService: https://udacity.com
+  contact:
+    name: Example Contact
+    url: https://example.com/contact
+  license:
+    name: Example License
+    url: https://example.com/license
+  version: v1
+servers:
+  - url: http://localhost:30001
+paths:
+  "/api/persons":
+    get:
+      tags:
+        - GetPersons
+      operationId: GetPersons
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PersonMessage"
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "500":
+          description: Server Error
+        "503":
+          description: Service Unavailable
+  "/api/persons/{personId}/connection?start_date={start-date}&end_date={end-date}&distance={distance}":
+    get:
+      tags:
+        - GetConnection
+      operationId: GetConnection
+      parameters:
+        - name: personId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start-date
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: end-date
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: distance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ConnectionMessage"
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "500":
+          description: Server Error
+        "503":
+          description: Service Unavailable
+
+components:
+  schemas:
+    PersonMessage:
+      type: array
+      items:
+        "$ref": "#/components/schemas/PersonMessageItem"
+    PersonMessageItem:
+      type: object
+      properties:
+        Id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        company_name:
+          type: string
+    ConnectionMessage:
+      type: array
+      items:
+        "$ref": "#/components/schemas/ConnectionMessageItem"
+    ConnectionMessageItem:
+      type: object
+      properties:
+        person:
+          "$ref": "#/components/schemas/PersonMessageItem"
+        location:
+          "$ref": "#/components/schemas/LocationMessageItem"
+    LocationMessageItem:
+      type: object
+      properties:
+        Id:
+          type: integer
+        person_id:
+          type: integer
+        creation_time:
+          type: string
+        latitude:
+          type: string
+        longitude:
+          type: string

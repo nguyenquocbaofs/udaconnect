@@ -1,0 +1,14 @@
+Find the endpoint in .\modules\location-producer\app\udaconnect\location.proto
+
+--Make a sample request
+1. Make sure the deployment was successfully (find in README.md)
+2. Go to location-producer folder
+3. Run 'python -u app/udaconnect/writer.py'
+4. Run 'kubectl get pods' to get pod name of consumer
+5. Run 'kubectl logs udaconnect-location-consumer-{xxxx}' to check log of consumer
+Out put should be:
+Received a message:  ConsumerRecord(topic='location', partition=0, offset=3, timestamp=1681141862254, timestamp_type=0, key=None, value=b'{"person_id": 1, "latitude": 1.2339999675750732, "longitude": 5.677999973297119}', headers=[], checksum=None, serialized_key_size=-1, serialized_value_size=80, serialized_header_size=-1)
+Received a location:  {'person_id': 1, 'latitude': 1.2339999675750732, 'longitude': 5.677999973297119}
+Location added to database successfully
+
+6. Configuration!!! The setup was correct

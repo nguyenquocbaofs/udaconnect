@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.udaconnect.models import Connection, Location, Person
+from app.udaconnect.models import Location, Person
 from app.udaconnect.schemas import (
     ConnectionSchema,
     LocationSchema,
@@ -24,13 +24,6 @@ api = Namespace("UdaConnect", description="Connections via geolocation.")  # noq
 @api.route("/locations/<location_id>")
 @api.param("location_id", "Unique ID for a given Location", _in="query")
 class LocationResource(Resource):
-    @accepts(schema=LocationSchema)
-    @responds(schema=LocationSchema)
-    def post(self) -> Location:
-        request.get_json()
-        location: Location = LocationService.create(request.get_json())
-        return location
-
     @responds(schema=LocationSchema)
     def get(self, location_id) -> Location:
         location: Location = LocationService.retrieve(location_id)
@@ -71,7 +64,8 @@ class ConnectionDataResource(Resource):
         start_date: datetime = datetime.strptime(
             request.args["start_date"], DATE_FORMAT
         )
-        end_date: datetime = datetime.strptime(request.args["end_date"], DATE_FORMAT)
+        end_date: datetime = datetime.strptime(
+            request.args["end_date"], DATE_FORMAT)
         distance: Optional[int] = request.args.get("distance", 5)
 
         results = ConnectionService.find_contacts(
